@@ -1,0 +1,36 @@
+import { describe, it, expect, beforeEach } from 'vitest'
+import { render, screen } from '@testing-library/react'
+import { Title } from './index'
+import styles from './styles.module.scss'
+
+describe("Title", () => {
+  let text;
+  let props;
+
+  beforeEach(() => {
+    text = "Hello";
+    props = {
+      text,
+    };
+  });
+
+  it("renders correctly the component", () => {
+    const { container } = render(<Title {...props} />);
+    expect(container).toMatchSnapshot();
+  });
+
+  describe("when the title is secondary", () => {
+    beforeEach(() => {
+      props = {
+        ...props,
+        isSecondary: true,
+      };
+    });
+
+    it("renders the title with underline", () => {
+      render(<Title {...props} />);
+      expect(screen.getByRole("heading", { level: 1 })).toBeInTheDocument();
+      expect(screen.getByText(text)).toHaveClass(styles.secondary);
+    });
+  });
+});
