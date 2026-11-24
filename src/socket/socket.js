@@ -1,34 +1,40 @@
-import { io } from "socket.io-client";
+import { io } from 'socket.io-client'
 
-// Use VITE_SOCKET_URL only when explicitly configured; otherwise keep the current-origin proxy.
-const socket = io(import.meta.env.VITE_SOCKET_URL || undefined);
+const socket = io(
+  import.meta.env.VITE_SOCKET_URL || import.meta.env.VITE_API_URL,
+  {
+    withCredentials: true
+  }
+)
 
 export const initSocket = () => {
-  console.log("Inicializando socket...");
+  console.log('Inicializando socket...')
 
-  // Check if socket is connected
   if (socket.connected) {
-    console.log("Estou conectado");
+    console.log('Estou conectado')
   } else {
-    console.log("Tentando conectar...");
+    console.log('Tentando conectar...')
   }
 
-  // Listen for connection events
-  socket.on("connect", () => {
-    console.log("Conectado ao servidor:", socket.id);
-  });
+  socket.on('connect', () => {
+    console.log('Conectado ao servidor:', socket.id)
+  })
 
-  socket.on("disconnect", () => {
-    console.log("Desconectado do servidor");
-  });
+  socket.on('connect_error', error => {
+    console.error('Erro Socket.IO:', error.message)
+  })
 
-  return socket;
-};
+  socket.on('disconnect', () => {
+    console.log('Desconectado do servidor')
+  })
 
-export const socketAddListener = (listener = "", callback = () => {}) => {
-  socket.on(listener, callback);
-};
+  return socket
+}
 
-export const socketRemoveListener = (listener = "", callback = () => {}) => {
-  socket.off(listener, callback);
-};
+export const socketAddListener = (listener = '', callback = () => {}) => {
+  socket.on(listener, callback)
+}
+
+export const socketRemoveListener = (listener = '', callback = () => {}) => {
+  socket.off(listener, callback)
+}
