@@ -1,17 +1,25 @@
+const API_URL = import.meta.env.VITE_API_URL
+
 export const getGames = ({ pageSize, current } = {}) => {
-    const query = new URLSearchParams({
-        limit: pageSize || 10,
-        skip: (current || 1) -1,
-    });
+  const query = new URLSearchParams({
+    limit: pageSize || 10,
+    skip: (current || 1) - 1
+  })
 
-    return fetch(`/api/games?${query}`,{
-        headers: { Accept: "application/json" },
-    }).then((response) => response.json ());
-};
+  return fetch(`${API_URL}/games?${query}`, {
+    headers: {
+      Accept: 'application/json'
+    },
+    credentials: 'include'
+  }).then(response => response.json())
+}
 
-export const createGame = (data) =>
-    fetch("/api/games", {
-        headers: { "Content-Type": "application/json" },
-        method: "POST",
-        body: JSON.stringify(data),
-    });
+export const createGame = data =>
+  fetch(`${API_URL}/games`, {
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    method: 'POST',
+    credentials: 'include',
+    body: JSON.stringify(data)
+  })

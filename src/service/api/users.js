@@ -1,17 +1,25 @@
-export const getUsers = ({pageSize, current} = {}) => {
-    const query = new URLSearchParams({
-        limit: pageSize,
-        skip: (current || 1) - 1,
-    });
+const API_URL = import.meta.env.VITE_API_URL
 
-    return fetch(`/api/users?${query}`, {
-        headers: { Accept: "application/json"},
-    }).then((response) => response.json());
-};
+export const getUsers = ({ pageSize, current } = {}) => {
+  const query = new URLSearchParams({
+    limit: pageSize || 10,
+    skip: (current || 1) - 1
+  })
 
-export const createUser = (data) =>
-    fetch("api/users", {
-        headers: {"Content-Type": "application/json"},
-        method: "POST",
-        body: JSON.stringify(data),
-    })
+  return fetch(`${API_URL}/users?${query}`, {
+    headers: {
+      Accept: 'application/json'
+    },
+    credentials: 'include'
+  }).then(response => response.json())
+}
+
+export const createUser = data =>
+  fetch(`${API_URL}/users`, {
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    method: 'POST',
+    credentials: 'include',
+    body: JSON.stringify(data)
+  })
